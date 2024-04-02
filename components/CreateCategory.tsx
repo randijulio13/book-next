@@ -2,6 +2,7 @@ import axiosInstance from "@/libs/axios";
 import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import { Dialog, Transition } from "@headlessui/react";
+import classNames from "classnames";
 import { Fragment, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -15,13 +16,14 @@ interface CreateCategoryProps {
 
 export default function CreateCategory({ refresh }: CreateCategoryProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { accessToken } = useAuthStore();
+  const { accessToken, checkAuthState } = useAuthStore();
 
   function closeModal() {
     setIsOpen(false);
   }
 
   function openModal() {
+    if (!checkAuthState()) return;
     setIsOpen(true);
   }
 
@@ -53,8 +55,12 @@ export default function CreateCategory({ refresh }: CreateCategoryProps) {
   return (
     <>
       <button
+        disabled={!accessToken}
         onClick={openModal}
-        className="px-4 py-2 bg-gray-800 hover:bg-black duration-200 text-white"
+        className={classNames("px-4 py-2 duration-200 text-white", {
+          "bg-gray-300 hover:cursor-not-allowed": !accessToken,
+          "bg-gray-800 hover:bg-black": accessToken,
+        })}
       >
         Create Category
       </button>

@@ -3,12 +3,13 @@ import Layout from "@/components/Layout";
 import axiosInstance from "@/libs/axios";
 import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 
 const categories = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
-  const { accessToken } = useAuthStore();
+  const { accessToken, checkAuthState } = useAuthStore();
 
   const getCategories = async () => {
     let { data } = await axiosInstance.get("/categories", {
@@ -21,6 +22,7 @@ const categories = () => {
 
   const deleteCategories = async (id: string) => {
     try {
+      if (!checkAuthState()) return;
       let { isConfirmed } = await swal.fire({
         title: "Delete?",
         icon: "question",
@@ -63,11 +65,9 @@ const categories = () => {
       <div className="mx-auto w-full md:w-2/3 p-4">
         <div className="bg-white border shadow-lg p-4">
           <div className="p-2 flex">
-            {accessToken && (
-              <div className="mb-4">
-                <CreateCategory refresh={getCategories} />
-              </div>
-            )}
+            <div className="mb-4">
+              <CreateCategory refresh={getCategories} />
+            </div>
             <div className="ms-auto">
               <form onSubmit={handleSearch} className="flex gap-2">
                 <input
@@ -93,7 +93,7 @@ const categories = () => {
             </thead>
             <tbody>
               {categories.length == 0 && (
-                <tr>
+                <tr className="h-24">
                   <td colSpan={3} className="text-center">
                     No data
                   </td>
@@ -105,16 +105,20 @@ const categories = () => {
                   <td>{c?.name}</td>
                   <td className="text-center">
                     <div>
-                      {accessToken ? (
-                        <button
-                          onClick={() => deleteCategories(c.id)}
-                          className="px-2 py-1 text-sm bg-gray-800 hover:bg-black duration-200 text-white"
-                        >
-                          Delete
-                        </button>
-                      ) : (
-                        "-"
-                      )}
+                      <button
+                        disabled={!accessToken}
+                        onClick={() => deleteCategories(c.id)}
+                        className={classNames(
+                          "px-2 py-1 text-sm duration-200 text-white",
+                          {
+                            "bg-gray-300 hover:cursor-not-allowed":
+                              !accessToken,
+                            "bg-gray-800 hover:bg-black": accessToken,
+                          }
+                        )}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
