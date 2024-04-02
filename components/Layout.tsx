@@ -1,5 +1,7 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import Navbar from "./Navbar";
+import useAuthStore from "@/stores/auth";
+import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: ReactNode;

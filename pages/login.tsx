@@ -1,11 +1,13 @@
 import Layout from "@/components/Layout";
 import axios from "@/libs/axios";
+import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 type LoginInput = {
   username: string;
@@ -22,7 +24,6 @@ const login = () => {
       router.push("/books");
     }
   }, [accessToken]);
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
@@ -39,6 +40,11 @@ const login = () => {
     try {
       let { data } = await axios.post("/auth/login", input);
       setAccessToken(data.accessToken);
+      swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Login success",
+      });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err?.response?.status == 401) {
@@ -79,9 +85,9 @@ const login = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword((old) => !old)}
-                className="absolute inset-y-0 end-5 hover:font-bold duration-200"
+                className="absolute inset-y-0 end-5 hover:text-black text-gray-400 duration-200 active:-rotate-180"
               >
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
             {errors.password && (
