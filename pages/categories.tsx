@@ -1,6 +1,7 @@
 import CreateCategory from "@/components/CreateCategory";
 import Layout from "@/components/Layout";
 import axiosInstance from "@/libs/axios";
+import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import React, { useEffect, useState } from "react";
 
@@ -20,12 +21,28 @@ const categories = () => {
 
   const deleteCategories = async (id: string) => {
     try {
+      let { isConfirmed } = await swal.fire({
+        title: "Delete?",
+        icon: "question",
+        text: "Are you sure you want to delete this category?",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+      });
+
+      if (!isConfirmed) return;
+
       let { data } = await axiosInstance.delete(`/categories/${id}`, {
         headers: {
           accessToken,
         },
       });
 
+      swal.fire({
+        title: "Success",
+        icon: "success",
+        text: "Category deleted",
+        confirmButtonText: "Close",
+      });
       getCategories();
     } catch (err) {
       console.log(err);
@@ -75,6 +92,13 @@ const categories = () => {
               </tr>
             </thead>
             <tbody>
+              {categories.length == 0 && (
+                <tr>
+                  <td colSpan={3} className="text-center">
+                    No data
+                  </td>
+                </tr>
+              )}
               {categories.map((c: any, i) => (
                 <tr key={c.id} className="h-12">
                   <td className="text-center">{i + 1}</td>

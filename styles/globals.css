@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.swal2-popup {
+    border-radius: 0;
+}
+
+.swal2-actions {
+    gap: 0.5rem;
+}

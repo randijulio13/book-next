@@ -1,4 +1,5 @@
 import axiosInstance from "@/libs/axios";
+import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
@@ -38,9 +39,15 @@ export default function CreateCategory({ refresh }: CreateCategoryProps) {
       },
     });
 
+    swal.fire({
+      title: "Success",
+      icon: "success",
+      text: "Category created",
+      confirmButtonText: "Close",
+    });
     refresh();
     closeModal();
-    reset()
+    reset();
   };
 
   return (
