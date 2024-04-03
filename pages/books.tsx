@@ -12,6 +12,7 @@ import FilterBook from "@/components/FilterBook";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import BookImage from "@/components/BookImage";
+import { FaSpinner } from "react-icons/fa";
 
 interface IBook {
   category_id: number;
@@ -34,6 +35,7 @@ const Books = () => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [bookUrl, setBookUrl] = useState("");
+  const [loadingBook, setLoadingBook] = useState(true);
 
   const { setLoading } = useContext(LayoutContext);
   const { accessToken } = useAuthStore();
@@ -57,6 +59,7 @@ const Books = () => {
       params: {},
     });
     setBooks(data.data);
+    setLoadingBook(false)
   };
 
   useEffect(() => {
@@ -103,6 +106,13 @@ const Books = () => {
             <CreateBook categories={categories} refresh={getBooks} />
             <FilterBook categories={categories} setBooks={setBooks} />
           </div>
+          {loadingBook && (
+            <div className="w-full h-96 flex items-center justify-center">
+              <span className="text-4xl">
+                <FaSpinner className="animate-spin" />
+              </span>
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {books.map((b, i) => (
               <div key={i} className="flex flex-col bg-white border">
