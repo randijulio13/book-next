@@ -1,8 +1,5 @@
 import Layout from "@/components/Layout";
 import React, {
-  ChangeEvent,
-  FormEvent,
-  FormEventHandler,
   useContext,
   useEffect,
   useState,
@@ -15,7 +12,6 @@ import Description from "@/components/Description";
 import swal from "@/libs/sweetalert";
 import classNames from "classnames";
 import { ICategory } from "./categories";
-import { SubmitHandler, useForm } from "react-hook-form";
 import FilterBook from "@/components/FilterBook";
 
 interface IBook {
@@ -35,7 +31,7 @@ interface IBook {
   };
 }
 
-const books = () => {
+const Books = () => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
 
@@ -163,4 +159,4 @@ const books = () => {
   );
 };
 
-export default books;
+export default Books;

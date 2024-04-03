@@ -15,7 +15,7 @@ type LoginInput = {
   password: string;
 };
 
-const login = () => {
+const Login = () => {
   const { setLoading } = useContext(LayoutContext);
   const { accessToken } = useAuthStore();
 
@@ -25,7 +25,7 @@ const login = () => {
     if (accessToken !== "") {
       router.push("/books");
     }
-  }, [accessToken]);
+  }, [accessToken, router]);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const {
@@ -118,4 +118,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;

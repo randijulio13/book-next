@@ -1,8 +1,8 @@
 import Layout from "@/components/Layout";
 import React from "react";
 
-const index = () => {
+const Index = () => {
   return <Layout>oke</Layout>;
 };
 
-export default index;
+export default Index;

@@ -12,7 +12,7 @@ export interface ICategory {
   name: string;
 }
 
-const categories = () => {
+const Categories = () => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [name, setName] = useState("");
   const { accessToken, checkAuthState } = useAuthStore();
@@ -63,7 +63,7 @@ const categories = () => {
 
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [getCategories]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -141,4 +141,4 @@ const categories = () => {
   );
 };
 
-export default categories;
+export default Categories;
