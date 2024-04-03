@@ -45,7 +45,7 @@ const Layout = ({ children }: LayoutProps) => {
       <div>
         <div
           className={classNames(
-            "fixed lg:translate-x-0 duration-200 w-72 h-screen z-10",
+            "fixed lg:translate-x-0 duration-200 w-72 h-screen z-20",
             {
               "-translate-x-72": !showMenu,
               "translate-x-0": showMenu,

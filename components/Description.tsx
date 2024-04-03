@@ -8,10 +8,10 @@ interface DescriptionProps {
 export default function Description({ description }: DescriptionProps) {
   return (
     <div className="has-tooltip w-full">
-      <span className="tooltip text-sm shadow-lg p-1 bg-black text-white">
+      <span className="hidden md:block tooltip text-sm shadow-lg p-1 bg-black text-white">
         {description}
       </span>
-      <div className="w-full truncate">
+      <div className="w-full md:truncate">
         <span className="text-sm">{description}</span>
       </div>
     </div>

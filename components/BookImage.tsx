@@ -12,7 +12,7 @@ export default function BookImage({
 
   return (
     <Transition appear show={url !== ""} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={close}>
+      <Dialog as="div" className="relative z-30" onClose={close}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

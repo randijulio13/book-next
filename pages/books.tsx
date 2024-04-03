@@ -122,7 +122,7 @@ const Books = () => {
                     "w-full z-0 aspect-square object-cover overflow-hidden relative border-b bg-center bg-cover"
                   )}
                 ></div>
-                <div className="p-2 w-ful">
+                <div className="p-2 w-full">
                   <h1 className="text-xl font-semibold">{b.title}</h1>
                   <span className="text-[0.75rem] font-bold text-gray-400">
                     {b.category.name}
