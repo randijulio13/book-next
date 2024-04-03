@@ -45,7 +45,7 @@ const Register = () => {
       router.push("/login");
     } catch (err) {
       if (err instanceof AxiosError) {
-        if (err?.response?.status == 401) {
+        if (err?.response?.status == 409) {
           setError("username", { message: err?.response?.data.message });
         }
       }
@@ -62,18 +62,6 @@ const Register = () => {
           className="w-full md:w-2/3 lg:w-1/3 bg-white shadow-lg p-4"
         >
           <div className="flex flex-col gap-2 mb-4">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              className="px-4 py-2 border"
-              {...register("name", { required: "name is required" })}
-            />
-            {errors.name && (
-              <span className="text-red-500">{errors.name.message}</span>
-            )}
-          </div>
-          <div className="flex flex-col gap-2 mb-4">
             <label htmlFor="username">Username</label>
             <input
               type="text"
@@ -83,6 +71,18 @@ const Register = () => {
             />
             {errors.username && (
               <span className="text-red-500">{errors.username.message}</span>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 mb-4">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              className="px-4 py-2 border"
+              {...register("name", { required: "name is required" })}
+            />
+            {errors.name && (
+              <span className="text-red-500">{errors.name.message}</span>
             )}
           </div>
           <div className="flex flex-col gap-2 mb-4">
@@ -133,7 +133,9 @@ const Register = () => {
               </button>
             </div>
             {errors.confirm_password && (
-              <span className="text-red-500">{errors.confirm_password.message}</span>
+              <span className="text-red-500">
+                {errors.confirm_password.message}
+              </span>
             )}
           </div>
           <div className="flex justify-end gap-4">
