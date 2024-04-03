@@ -1,15 +1,22 @@
 import CreateCategory from "@/components/CreateCategory";
 import Layout from "@/components/Layout";
+import { LayoutContext } from "@/contexts/LayoutContext";
 import axiosInstance from "@/libs/axios";
 import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
+export interface ICategory {
+  id: string;
+  name: string;
+}
 
 const categories = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [name, setName] = useState("");
   const { accessToken, checkAuthState } = useAuthStore();
+  const { setLoading } = useContext(LayoutContext);
 
   const getCategories = async () => {
     let { data } = await axiosInstance.get("/categories", {
@@ -22,6 +29,7 @@ const categories = () => {
 
   const deleteCategories = async (id: string) => {
     try {
+      setLoading(true);
       if (!checkAuthState()) return;
       let { isConfirmed } = await swal.fire({
         title: "Delete?",
@@ -48,6 +56,8 @@ const categories = () => {
       getCategories();
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,14 +74,14 @@ const categories = () => {
     <Layout>
       <div className="mx-auto w-full md:w-2/3 p-4">
         <div className="bg-white border shadow-lg p-4">
-          <div className="p-2 flex">
-            <div className="mb-4">
+          <div className="p-2 grid grid-cols-1 lg:grid-cols-2">
+            <div className="mb-4 w-full lg:w-auto">
               <CreateCategory refresh={getCategories} />
             </div>
-            <div className="ms-auto">
-              <form onSubmit={handleSearch} className="flex gap-2">
+            <div className="lg:ms-auto lg:w-full">
+              <form onSubmit={handleSearch} className="flex gap-2 justify-end">
                 <input
-                  className="px-4 py-2 rounded-none border"
+                  className="px-4 py-2 rounded-none border w-full lg:w-auto"
                   type="text"
                   value={name}
                   placeholder="Search category..."

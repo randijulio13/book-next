@@ -1,11 +1,12 @@
 import Layout from "@/components/Layout";
+import { LayoutContext } from "@/contexts/LayoutContext";
 import axios from "@/libs/axios";
 import swal from "@/libs/sweetalert";
 import useAuthStore from "@/stores/auth";
 import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -15,6 +16,7 @@ type LoginInput = {
 };
 
 const login = () => {
+  const { setLoading } = useContext(LayoutContext);
   const { accessToken } = useAuthStore();
 
   const router = useRouter();
@@ -38,6 +40,7 @@ const login = () => {
 
   const onSubmit: SubmitHandler<LoginInput> = async (input) => {
     try {
+      setLoading(true);
       let { data } = await axios.post("/auth/login", input);
       setAccessToken(data.accessToken);
       swal.fire({
@@ -51,6 +54,8 @@ const login = () => {
           setError("username", { message: err?.response?.data.message });
         }
       }
+    } finally {
+      setLoading(false);
     }
   };
 
