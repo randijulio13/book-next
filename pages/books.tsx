@@ -1,9 +1,5 @@
 import Layout from "@/components/Layout";
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useAuthStore from "@/stores/auth";
 import { LayoutContext, ILayoutContext } from "@/contexts/LayoutContext";
 import axiosInstance from "@/libs/axios";
@@ -13,6 +9,9 @@ import swal from "@/libs/sweetalert";
 import classNames from "classnames";
 import { ICategory } from "./categories";
 import FilterBook from "@/components/FilterBook";
+import { AnimatePresence, motion } from "framer-motion";
+import { IoMdClose } from "react-icons/io";
+import BookImage from "@/components/BookImage";
 
 interface IBook {
   category_id: number;
@@ -34,6 +33,7 @@ interface IBook {
 const Books = () => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [bookUrl, setBookUrl] = useState("");
 
   const { setLoading } = useContext(LayoutContext);
   const { accessToken } = useAuthStore();
@@ -86,6 +86,7 @@ const Books = () => {
         text: "Book deleted",
         confirmButtonText: "Close",
       });
+      getBooks();
     } catch (err) {
       console.log(err);
     } finally {
@@ -95,6 +96,7 @@ const Books = () => {
 
   return (
     <Layout>
+      <BookImage url={bookUrl} close={() => setBookUrl("")} />
       <div className="w-full">
         <div className="p-4">
           <div className="mb-2 flex gap-2">
@@ -127,13 +129,15 @@ const Books = () => {
                   </div>
                 </div>
                 <div className="flex justify-end gap-2 p-2 border-t">
-                  <a
-                    href={b.image_url}
-                    target="_blank"
+                  <button
+                    type="button"
+                    onClick={() => setBookUrl(b.image_url)}
+                    // href={b.image_url}
+                    // target="_blank"
                     className="px-2 py-1 text-sm text-white bg-gray-800 hover:bg-black duration-200"
                   >
-                    Open
-                  </a>
+                    Show Image
+                  </button>
                   <button
                     disabled={!accessToken}
                     onClick={(e) => {

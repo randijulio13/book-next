@@ -34,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="bg-black/30 flex items-center justify-center absolute h-screen w-screen z-50"
+            className="bg-black/30 flex items-center justify-center absolute inset-0 h-screen w-screen z-50"
           >
             <span className="animate-spin text-4xl">
               <FaSpinner />
@@ -45,7 +45,7 @@ const Layout = ({ children }: LayoutProps) => {
       <div>
         <div
           className={classNames(
-            "fixed lg:translate-x-0 duration-200 w-72 h-screen z-20",
+            "fixed lg:translate-x-0 duration-200 w-72 h-screen z-10",
             {
               "-translate-x-72": !showMenu,
               "translate-x-0": showMenu,
