@@ -19,12 +19,14 @@ const Categories = () => {
   const { setLoading } = useContext(LayoutContext);
 
   const getCategories = async () => {
+    setLoading(true);
     let { data } = await axiosInstance.get("/categories", {
       params: {
         name,
       },
     });
     setCategories(data.data);
+    setLoading(false);
   };
 
   const deleteCategories = async (id: string) => {
