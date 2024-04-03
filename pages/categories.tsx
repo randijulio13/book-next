@@ -63,7 +63,7 @@ const Categories = () => {
 
   useEffect(() => {
     getCategories();
-  }, [getCategories]);
+  }, []);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
