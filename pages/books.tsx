@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import React, {
+  ChangeEvent,
   FormEvent,
   FormEventHandler,
   useContext,
@@ -12,6 +13,10 @@ import axiosInstance from "@/libs/axios";
 import CreateBook from "@/components/CreateBook";
 import Description from "@/components/Description";
 import swal from "@/libs/sweetalert";
+import classNames from "classnames";
+import { ICategory } from "./categories";
+import { SubmitHandler, useForm } from "react-hook-form";
+import FilterBook from "@/components/FilterBook";
 
 interface IBook {
   category_id: number;
@@ -25,27 +30,37 @@ interface IBook {
   title: string;
   total_pages: number;
   updated_at: string;
+  category: {
+    name: string;
+  };
 }
 
 const books = () => {
-  const [name, setName] = useState("");
   const [books, setBooks] = useState<IBook[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
   const { setLoading } = useContext(LayoutContext);
   const { accessToken } = useAuthStore();
 
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    getBooks();
+  const getCategories = async () => {
+    let { data } = await axiosInstance.get("/categories", {
+      params: {
+        name: "",
+      },
+    });
+    console.log(data.data);
+    setCategories(data.data);
   };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   const getBooks = async () => {
     let { data } = await axiosInstance.get("/books", {
-      params: {
-        name,
-      },
+      params: {},
     });
     setBooks(data.data);
-    console.log(data.data);
   };
 
   useEffect(() => {
@@ -84,35 +99,26 @@ const books = () => {
 
   return (
     <Layout>
-      <div className="mx-auto w-full md:w-2/3 p-4">
-        <div className="bg-white border shadow-lg p-4">
-          <div className="p-2 grid grid-cols-1 lg:grid-cols-2">
-            <div className="mb-4 w-full lg:w-auto">
-              <CreateBook refresh={getBooks} />
-            </div>
-            <div className="lg:ms-auto lg:w-full">
-              <form onSubmit={handleSearch} className="flex gap-2 justify-end">
-                <input
-                  className="px-4 py-2 rounded-none border w-full lg:w-auto"
-                  type="text"
-                  value={name}
-                  placeholder="Search category..."
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <button className="px-4 py-2 bg-gray-800 text-white hover:bg-black duration-200">
-                  Cari
-                </button>
-              </form>
-            </div>
+      <div className="w-full">
+        <div className="p-4">
+          <div className="mb-2 flex gap-2">
+            <CreateBook categories={categories} refresh={getBooks} />
+            <FilterBook categories={categories} setBooks={setBooks} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {books.map((b, i) => (
               <div key={i} className="flex flex-col bg-white border">
-                <div className="w-full z-0 aspect-square object-cover overflow-hidden relative border-b">
-                  <img src={b.image_url} />
-                </div>
+                <div
+                  style={{ backgroundImage: `url('${b.image_url}')` }}
+                  className={classNames(
+                    "w-full z-0 aspect-square object-cover overflow-hidden relative border-b bg-center bg-cover"
+                  )}
+                ></div>
                 <div className="p-2 w-ful">
                   <h1 className="text-xl font-semibold">{b.title}</h1>
+                  <span className="text-[0.75rem] font-bold text-gray-400">
+                    {b.category.name}
+                  </span>
                   <Description description={b.description} />
                   <div className="flex gap-2">
                     <span className="text-[0.75rem] text-gray-400">
@@ -133,10 +139,17 @@ const books = () => {
                     Open
                   </a>
                   <button
+                    disabled={!accessToken}
                     onClick={(e) => {
-                      e.preventDefault(), handleDeleteBook(b.id);
+                      e.preventDefault(), handleDeleteBook(String(b.id));
                     }}
-                    className="px-2 py-1 text-sm text-white bg-red-500 hover:bg-red-600 duration-200"
+                    className={classNames(
+                      "px-2 py-1 text-sm text-white duration-200",
+                      {
+                        "bg-red-500 hover:bg-red-600": accessToken,
+                        "bg-gray-300 cursor-not-allowed": !accessToken,
+                      }
+                    )}
                   >
                     Delete
                   </button>

@@ -21,26 +21,13 @@ interface CreateBookInput {
 
 interface CreateBookProps {
   refresh: () => void;
+  categories: ICategory[];
 }
 
-export default function CreateBook({ refresh }: CreateBookProps) {
+export default function CreateBook({ refresh, categories }: CreateBookProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { accessToken, checkAuthState } = useAuthStore();
   const { setLoading } = useContext(LayoutContext);
-  const [categories, setCategories] = useState<ICategory[]>([]);
-
-  const getCategories = async () => {
-    let { data } = await axiosInstance.get("/categories", {
-      params: {
-        name,
-      },
-    });
-    setCategories(data.data);
-  };
-
-  useEffect(() => {
-    getCategories();
-  }, []);
 
   function closeModal() {
     reset();

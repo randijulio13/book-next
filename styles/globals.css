@@ -1,8 +1,9 @@
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
 
 .tooltip {
-    @apply invisible absolute max-w-96;
+    @apply invisible absolute max-w-96 max-h-32 overflow-auto;
 }
 
 .has-tooltip:hover .tooltip {
@@ -10,7 +11,6 @@
 }
 
 
-@tailwind utilities;
 
 .swal2-popup {
     border-radius: 0;

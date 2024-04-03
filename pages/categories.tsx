@@ -72,27 +72,27 @@ const categories = () => {
 
   return (
     <Layout>
-      <div className="mx-auto w-full md:w-2/3 p-4">
-        <div className="bg-white border shadow-lg p-4">
-          <div className="p-2 grid grid-cols-1 lg:grid-cols-2">
-            <div className="mb-4 w-full lg:w-auto">
-              <CreateCategory refresh={getCategories} />
-            </div>
-            <div className="lg:ms-auto lg:w-full">
-              <form onSubmit={handleSearch} className="flex gap-2 justify-end">
-                <input
-                  className="px-4 py-2 rounded-none border w-full lg:w-auto"
-                  type="text"
-                  value={name}
-                  placeholder="Search category..."
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <button className="px-4 py-2 bg-gray-800 text-white hover:bg-black duration-200">
-                  Cari
-                </button>
-              </form>
-            </div>
+      <div className="w-full p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 mb-4 lg:mb-0">
+          <div className="mb-4 w-full lg:w-auto">
+            <CreateCategory refresh={getCategories} />
           </div>
+          <div className="lg:ms-auto lg:w-full">
+            <form onSubmit={handleSearch} className="flex gap-2 justify-end">
+              <input
+                className="px-4 py-2 rounded-none border w-full lg:w-auto"
+                type="text"
+                value={name}
+                placeholder="Search category..."
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button className="px-4 py-2 bg-gray-800 text-white hover:bg-black duration-200">
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="bg-white border shadow-lg p-4">
           <table className="w-full">
             <thead>
               <tr>
